@@ -3,8 +3,11 @@ import InfoBar from "./components/infoBar";
 import briefcase from "./assets/icons/briefcase.svg";
 import SkillInfoBar from "./components/skillInfoBar";
 import Experience from "./components/experience";
+import { useRef, useState } from "react";
 
-function App() {
+const App = () => {
+  const toggleButton = useRef();
+  const [theme, setTheme] = useState("light");
   const infoTextArray = [
     "Engineer",
     "New York, USA",
@@ -15,26 +18,34 @@ function App() {
   const languagesArray = ["English", "Hindi", "Methli"];
 
   const setDarkMode = () => {
-    if (
-      localStorage.theme === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches)
-    ) {
+    if (theme !== "dark") {
+      setTheme("dark");
+      console.log(theme);
       document.documentElement.classList.add("dark");
+      toggleButton.current.classList.add("dark");
     } else {
+      setTheme("light");
+      console.log(theme);
       document.documentElement.classList.remove("dark");
+      toggleButton.current.classList.remove("dark");
     }
   };
   return (
     <>
       <div className="flex h-6 bg-slate-100 dark:bg-black dark:text-white">
         <span className=" my-1 ">Light</span>
-        <div className="bg-blue-100 my-1 mx-2 w-10 h-6">
+        <div className="relative mx-1 top-1" onClick={setDarkMode}>
           <div
-            className="w-5 h-6 rounded-full bg-white"
-            onClick={() => setDarkMode}
+            className="bg-blue-100 my-1 mx-3 w-8 h-4"
+            onClick={setDarkMode}
+          ></div>
+          <div
+            className="relative bottom-5 w-4 h-4 dark:right-[-2rem] rounded-full bg-blue-900"
+            ref={toggleButton}
+            onClick={setDarkMode}
           ></div>
         </div>
+
         <span className=" my-1 ">Dark</span>
       </div>
       <main className="bg-slate-100 dark:bg-black dark:text-white overflow-x-hidden grid grid-cols-1 md:grid-cols-4 lg:grid-cols-8">
@@ -123,6 +134,6 @@ function App() {
       </footer>
     </>
   );
-}
+};
 
 export default App;
